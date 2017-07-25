@@ -71,3 +71,7 @@
 
             return false;
         });
+
+// 参考文档
+// http://www.jianshu.com/p/46e6e03a0d53
+// https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
