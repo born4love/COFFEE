@@ -25,4 +25,5 @@ MySQL的开发者没有修复这个bug。他们在2010年增加了一个变通�
 MySQL中的 “utf8mb4” 才是 真正意义上的“UTF-8”。
 MySQL的“utf8”是个“特殊的字符编码”。这种编码很多Unicode字符保存不了。
 
+[原文地址](https://www.jianshu.com/p/ab9aa8d4df7d?openInApp=1)
 ---------
