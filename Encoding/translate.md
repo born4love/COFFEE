@@ -61,9 +61,40 @@
   
   就这样，精妙的UTF-8编码思想被发明出来了。UTF-8是另外一种编码方式，使用8位的字节在内存中存储Unicode 的code points，也就是U+数字。值在0-127之间的code point使用一个字节存储，只有 > 128 的 code point 使用 2个，3个最大至6个字节存储。看图，[戳这里](https://i1.wp.com/www.joelonsoftware.com/wp-content/uploads/2003/10/utf8.png?resize=400%2C63&ssl=1)
   
-  这样的处理方式对英文几乎没有影响，因为对于单字节字符来说UTF-8和ASCII的存储方式一模一样，只有英语之外的语言使用者需要处理多个字节，对于 Hello 来说，会被存储为 48 65 6C 6C 6F，这不光和ASCII的存储方式一样，而且和ANSI以及地球上的每一种OEM字符集都一样。如果你使用的 code point 需要多个字节来存储，美国人也不会觉察到。UTF-8还有一个很好的特性：一些老旧的字符串处理代码使用单个0字节作为字符串的结束标识，UTF-8可以防止字符串被这种代码截断。
+  这样的处理方式对英文几乎没有影响，因为对于单字节字符来说UTF-8和ASCII的存储方式一模一样，只有英语之外的语言使用者需要处理多个字节，对于 Hello 来说，会被存储为 48 65 6C 6C 6F，这不光和ASCII的存储方式一样，而且和ANSI以及地球上的每一种OEM字符集都一样。如果你使用的 code point 需要多个字节来存储，美国人也不会觉察到。UTF-8还有一个很好的特性：一些老旧的字符串处理代码使用一个0字节作为字符串的结束标识，UTF-8可以防止字符串被这种代码截断。（这样翻译不知道是否准确，附上原文：UTF-8 also has the nice property that ignorant old string-processing code that wants to use a single 0 byte as the null-terminator will not truncate strings）。
 
-  到这里，已经介绍了三种编码Unicode的方法：传统的2个字节存储的UCS-2（大端序或者小端序），UTF-16（使用16个bits），和流行的UTF-8标准。事实上还有一些别的编码方式，比如UTF-7，比较类似UTF-8，但是它保证字节的最高位永远是0,还有 UCS-4，使用4个字节存储所有的code point。
+  到这里，已经介绍了三种编码Unicode的方法：一个是传统的2个字节存储的UCS-2（大端序或者小端序），另外一个是UTF-16（使用16个bits），和最新流行的UTF-8标准，它拥有良好的特性，可以让在英文文本上工作感知不到和ASCII有什么区别。事实上还有一些别的编码方式，比如UTF-7，比较类似UTF-8，但是它保证字节的最高位永远是0,还有 UCS-4，使用4个字节存储所有的code point。
+  
+  可能你已经考虑到了，Unicode表示的所有字符对应的 code points 同样也可以被编码到老旧的编码规范里！比如，你可以把表示 Hello 的Unicode字符串 (U+0048 U+0065 U+006C U+006C U+006F)编码成ASCII，或者旧版的 OEM 希腊编码，或者希伯来语的 ANSI编码，或者任意的其他上百中已经被发明出来的编码，但是有一个情况是：如果你尝试使用的编码里没有和这些 code points 正好对应的映射关系，那么这些 code points 中的某些可能不会被正确的显示出来，通常显示出来的会是一个小问号：?,或者是像这样的一个小方块：�。
+  
+  有上百种传统的字符集编码只能存储一部分 code points ,剩下的其他 code points 都会被显示成问号。其中有一些很流行的英文编码，Windows-1252 (the Windows 9x standard for Western European languages) 和 ISO-8859-1, 还有 Latin-1 (对西欧语言来说很好用)，但是如果尝试把俄语或者希伯来语存储到这些编码里，你会的到很多很多的问号。UTF 7, 8, 16, 以及 32这类编码是可以完整而且正确的存储所有的 code points 的。
+  
+### The Single Most Important Fact About Encodings
+  
+  如果你已经完全忘了前面解释过所有一切，请记住一个尤其重要的事情。
+  （It does not make sense to have a string without knowing what encoding it uses. ）字符串离不开编码。你再也不可以把头埋在沙子里，然后假装普通文本就是 ASCII。（There Ain’t No Such Thing As Plain Text.）根本没有普通文本这回事。
+  
+  如果你有一个字符串在内存里，或者在一个文件里，或者在邮件里，你必须知道这个字符串是用什么方式编码的，否则你无法正确的处理它或者把它展示给用户。
+  
+  如果你不指明你的字符串是使用了UTF-8 或者 ASCII 或者 ISO 8859-1 (Latin 1) 或者 Windows 1252 (Western European)中的哪一个，你肯定就无法正确的显示它，甚至你根本找不到字符的在何处终止。就是因为这样，开发者经常会抱怨这些问题，“我的网站又乱码啦”，“当我使用音调的时候她就看不懂我的邮件了“。现在已经有多达上百种编码针对大于 127 的 code points，靠运气已经不切实际了。
+  
+  我们要如何标识一段字符使用了什么编码格式呢？当然，有一些标准方法，对于电子邮件信息，你需要在header里放置这种格式的字符串
+  ```C
+  Content-Type: text/plain; charset="UTF-8"
+  ```
+  对于网页来说，最初的想法是服务器增加一个类似 Content-Type 的 http header 和网页一起返回，并不是写在HTML里，而是做为一个响应 header 在 HTML页面之前发送,但是这导致了一个问题，如果一个网站的所有页面各自由使用不同语言的开发者开发，而且这些开发者各自使用不同的编码，服务器就无法知道应该发送什么编码格式了。所以如果可以在HTML文件里使用某种标记保存 Content-Type 用来指明使用何种编码，这样是很方便的。但是这个想法很疯狂：如果你不知道HTML文件使用的是什么编码，那你如何能读取它呢？？？但是值得庆幸的是，大部分常用的编码对于32－127之间的字符的编码规则都是一致的，所以你可以在读取整个HTML文件之间顺利的获取下面这段内容：
+```html
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+```
+因此网页中的 meta 标签要放置在 head 标签里而且是在整个文件的最上方，这样只要浏览器发现这个标记，它就会停下对 HTML 的解析，然后使用指定的编码对整个文件重新解析。
+
+
+
+
+
+
 
 
 >译至:
