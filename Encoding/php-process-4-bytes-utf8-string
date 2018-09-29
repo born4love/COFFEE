@@ -1,4 +1,7 @@
 <?php
+/***
+unicode inspect : https://apps.timwhitlock.info/unicode/inspect/hex/1F483
+**/
 
 $s = '💃'; // emoji takes 4 bytes in UTF-8
 
