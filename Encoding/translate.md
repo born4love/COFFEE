@@ -88,14 +88,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 ```
-因此网页中的 meta 标签要放置在 head 标签里而且是在整个文件的最上方，这样只要浏览器发现这个标记，它就会停下对 HTML 的解析，然后使用指定的编码对整个文件重新解析。
+  因此网页中的 meta 标签要放置在 head 标签里而且是在整个文件的最上方，这样只要浏览器发现这个标记，它就会停下对 HTML 的解析，然后使用指定的编码对整个文件重新解析。
 
-如果浏览器在 http header 和 meta 标签里都没有找到 Content-Type它会如何处理呢？IE浏览器会做一些有意思的事情：
+  如果浏览器在 http header 和 meta 标签里都没有找到 Content-Type它会如何处理呢？IE浏览器会做一些有意思的事情：它会基于各种各样的字节在不同语言的编码所表示的文本中出现的频率去猜测页面用的是什么语言和编码。因为各种各样的老旧的8bits的 code pages 总是把他们语言里的字符对应到128-255不同的范围里，而且不同语言里字符使用的频率是各具特色的，所以这种猜测还是有一定的成功的概率的。这虽然很奇怪，但是通常情况下一个完全不知道需要在页面放置 Content-Type 的网页开发者也能够看到他写的页面在浏览器里正常展示，直到有一天，他在页面里使用了大量的低频字符，然后 IE浏览器把他的页面解析成了韩语，所以坦白的说，Postel的“conservative in what you emit and liberal in what you accept”法则也并非那么适合工程师。不管如何，当一个用户看到保加利亚语编写的网页被展示成韩语的时候，他会做什么呢？他可能会使用 View|Encoding 菜单功能将网页更改成其他的编码，直到网页正常展示，但是大部分用户是不知道这么做的。
+  
+  我们有一个网站管理软件叫 CityDesk ，在它的最新版里，我们决定在代码内部使用 UCS-2（两个字节）的Unicode 来处理所有的字符串，Visual Basic, COM, and Windows NT/2000/XP 也都使用这种编码作为他们的字符串类型。在c++ 的代码里，我们使用 wchar_t（wide char）替代 “char”,使用 wcs 相关函数替代 str 的相关函数 （比如使用 wcscat 和 wcslen 而不是 strcat 或者 strlen）。在 C 语言里你可以在一个字符串前面加一个 L 来创建一个 UCS-2 字符串，像这样： L:"Hello"。
+  
+  当发布 CityDesk 网页的时候，会被转成 UTF-8 编码，浏览器在许多年里对UTF-8都支持的很好。这就是29个语言版本的 Joel on Software （作者自己的网站）是如何被编码的，而且我从未听过有一个用户在浏览这些网页的时候有什么显示的问题。
+  
+  这篇文章很长，但是也不可能涵盖 字符编码 和 Unicode 的所有一切知识，但是我相信如果你读到这里，对于编程来说你已经了解到了足够多的东西。最后，有一项任务交给你：使用抗生素代替水蛭和咒语（文章开篇作者举了一个例子： if you’re still programming that way, you’re not much better than a medical doctor who doesn’t believe in germs）。
+
+--------The End
 
 
 
-
-
-
->译至:
-[The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)
+>原文地址:
+>[The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)
