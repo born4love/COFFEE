@@ -42,7 +42,7 @@ import random
 
 sequence = [random.randint(0, 99999999) for i in xrange(100000)]
 
-sorted = Popen('sort1mb.exe', stdin=PIPE, stdout=PIPE)
+sorter = Popen('sort1mb.exe', stdin=PIPE, stdout=PIPE)
 for value in sequence:
   sorter.stdin.write('%08d\n' % value)
 sorter.stdin.close()
