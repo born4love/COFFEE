@@ -181,7 +181,8 @@ echo 0.3;  // 0.29999999999999998889776975374843
 
 相关阅读
 
-* 浮点数和二进制相互转换： https://blog.penjee.com/binary-numbers-floating-point-conversion/
-* 浮点数二进制存储工具: https://www.h-schmidt.net/FloatConverter/IEEE754.html
+* 二进制和浮点数转换： https://blog.penjee.com/binary-numbers-floating-point-conversion/
+* 浮点数转换工具: https://www.h-schmidt.net/FloatConverter/IEEE754.html
+* 64位浮点数转换工具： http://www.binaryconvert.com/convert_double.html
 * PHP文档浮点数解释： http://php.net/manual/zh/language.types.float.php
 * PHP修改浮点数显示有效数的位数：http://php.net/manual/zh/ini.core.php#ini.precision
