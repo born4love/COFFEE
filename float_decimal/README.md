@@ -159,7 +159,22 @@ var_dump (0.1 + 0.2 == 0.3) // 输出 bool(false)
 所以乘以100再执行 floor 就是 1989，损失了精度，而 0.1 和 0.2 在计算机表示法里却比实际的值要大 ，这也是二进制浮点数表示法决定的，因此 0.1 + 0.2 和
 0.3 在计算机看来并不相等。
 
+在PHP中，可以通过 ini_set 设置 'precision' 的值来调整浮点数输出的有效数的位数，可以打印出浮点数存储的准确数值. precision 的默认值是 14，PHP在处理浮点数的时候会对数字进行默认的四舍五入操作。
 
+```PHP
+
+ini_set("precision", 17);
+
+echo 0.1;   // 0.10000000000000001
+echo 19.9;  // 19.899999999999999
+echo 0.3;  // 0.29999999999999999
+
+ini_set("precision", 30);
+
+echo 0.1;   // 0.10000000000000000555111512312578
+echo 19.9;  // 19.8999999999999985789145284798
+echo 0.3;  // 0.29999999999999998889776975374843
+```
 
 
 
@@ -169,3 +184,4 @@ var_dump (0.1 + 0.2 == 0.3) // 输出 bool(false)
 * 浮点数和二进制相互转换： https://blog.penjee.com/binary-numbers-floating-point-conversion/
 * 浮点数二进制存储工具: https://www.h-schmidt.net/FloatConverter/IEEE754.html
 * PHP文档浮点数解释： http://php.net/manual/zh/language.types.float.php
+* PHP修改浮点数显示有效数的位数：http://php.net/manual/zh/ini.core.php#ini.precision
