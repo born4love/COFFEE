@@ -31,11 +31,9 @@
 >Usually, the number of keys is chosen to vary between {\displaystyle d} d and {\displaystyle 2d} 2d, 
 >where {\displaystyle d} d is the minimum number of keys, 
 >and {\displaystyle d+1} d+1 is the minimum degree or branching factor of the tree. 
-
-通常，非叶子节点包含值的数量控制在 d 到 2d 之间，所以 d 是非叶子节点拥有值的最小数量，而 d+1 表示树的最小度（也就是非叶子节点子节点数量的最少值）
-
 >In practice, the keys take up the most space in a node. The factor of 2 will guarantee that nodes can be split or combined. 
 
+通常，非叶子节点包含值的数量控制在 d 到 2d 之间，所以 d 是非叶子节点拥有值的最小数量，而 d+1 表示树的最小度（也就是非叶子节点子节点数量的最少值）
 事实上，非叶子节点包含值的数量如果超过了 2d 限制，则这个节点会被分割并重组。
 
 >If an internal node has {\displaystyle 2d} 2d keys, 
@@ -56,19 +54,15 @@
 删除这个值会使这个节点只有 d-1 个值，合并相邻节点会添加 d 个值同时包含一个从相邻节点父节点取下来的值。结果就会使该节点拥有 2d 个值。
 
 >The number of branches (or child nodes) from a node will be one more than the number of keys stored in the node. 
+>In a 2-3 B-tree, the internal nodes will store either one key (with two child nodes) or two keys (with three child nodes).
 
 一个节点拥有的子节点的个数等于它拥有的值的个数加1.
-
->In a 2-3 B-tree, the internal nodes will store either one key (with two child nodes) or two keys (with three child nodes). 
-
 在 2-3 B树中，内部节点会保存一个值（两个子节点）或者两个值（三个子节点）。
 
 >A B-tree is sometimes described with the parameters {\displaystyle (d+1)} (d+1) — {\displaystyle (2d+1)} (2d+1) or simply with the >highest branching order, {\displaystyle (2d+1)} (2d+1).
-
-一个B树有时候被描述为 (d+1) - (2d+1) 树，也可以直接用最大子节点个数 （2d+1）来描述。
-
 >A B-tree is kept balanced by requiring that all leaf nodes be at the same depth. 
 
+一个B树有时候被描述为 (d+1) - (2d+1) 树，也可以直接用最大子节点个数 （2d+1）来描述。
 一个B树通过使所有的叶子节点存储在相同的深度来保持平衡。
 
 >This depth will increase slowly as elements are added to the tree, but an increase in the overall depth is infrequent, 
@@ -78,32 +72,22 @@
 
 >B-trees have substantial advantages over alternative implementations when the time to access the data of a node greatly exceeds 
 >the time spent processing that data, 
-
-如果数据的查找时间远远超过了对数据进行处理的时间，那么对于其他实现方式来说，B树有本质上的优势。
-
 >because then the cost of accessing the node may be amortized over multiple operations within the node. 
-
-因为访问节点的时间消耗被均摊到节点内部的多次操作上。
-
 >This usually occurs when the node data are in secondary storage such as disk drives. 
 
-通常的情况是这些节点存储在想硬盘一样的二级存储里。
+如果数据的查找时间远远超过了对数据进行处理的时间，那么对于其他实现方式来说，B树有本质上的优势。
+因为访问节点的时间消耗被均摊到节点内部的多次操作上。通常的情况是这些节点存储在想硬盘一样的二级存储里。
 
 >By maximizing the number of keys within each internal node, 
 >the height of the tree decreases and the number of expensive node accesses is reduced. 
-
-通过最大化每个内部节点存储的值，使树的高度降低了而且减少访问节点的时间消耗。
-
 >In addition, rebalancing of the tree occurs less often. 
 
-而且，树的重新平衡操作被减少了。
+通过最大化每个内部节点存储的值，使树的高度降低了而且减少访问节点的时间消耗。而且，树的重新平衡操作被减少了。
 
 >The maximum number of child nodes depends on the information that must be stored for each child node and 
 >the size of a full disk block or an analogous size in secondary storage. 
-
-节点的最大子节点数量取决于每个节点必须存储的最大信息量和一个磁盘块的空间大小或者二级存储的存储块的大小。
-
 >While 2-3 B-trees are easier to explain, practical B-trees using secondary storage need a large number of 
 >child nodes to improve performance.
 
+节点的最大子节点数量取决于每个节点必须存储的最大信息量和一个磁盘块的空间大小或者二级存储的存储块的大小。
 尽管2-3树更容易理解，但是更实用的使用二级存储的B树需要很大的子节点数量来提高性能。
