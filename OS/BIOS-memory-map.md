@@ -22,3 +22,5 @@
 * 0xC8000 ~ 0xCBFFFF: ide控制器bios使用（16KB）
 * 0xCC000 ~ 0xEFFFFF: 
 * 0xF0000 ~ 0xFFFFFF: 系统bios使用（64KB）
+
+![bios-memory](Bios-mem.jpg)
