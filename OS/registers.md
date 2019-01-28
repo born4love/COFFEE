@@ -30,3 +30,7 @@ CPU 中还有8个8位寄存器
 * DS ---- 数据段寄存器 (data segment)
 * FS ---- 没有名字 (segment part 2)
 * GS ---- 没有名字 (segment part 3)
+
+任务寄存器
+
+* TR ---- 任务寄存器 (task register)
