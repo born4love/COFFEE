@@ -34,3 +34,8 @@ CPU 中还有8个8位寄存器
 任务寄存器
 
 * TR ---- 任务寄存器 (task register)
+
+标志寄存器
+
+* EFLAGS --- 
+![eflags](images/eflags.jpg)
