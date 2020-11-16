@@ -1,0 +1,78 @@
+version: "3.1"
+services:
+    nameserver1:
+        build: ./image/
+        networks:
+            rocknet:
+                ipv4_address: "172.28.0.15"
+        working_dir: /data
+        hostname: namesrv1
+        command: bash rocketmq/bin/mqnamesrv &
+
+    nameserver2:
+        build: ./image/
+        networks:
+            rocknet:
+                ipv4_address: "172.28.0.16"
+        working_dir: /data
+        hostname: namesrv2
+        command: bash rocketmq/bin/mqnamesrv &
+
+    broker1:
+        build: ./image/
+        networks:
+            - rocknet
+        working_dir: /data
+        hostname: broker1
+        command: bash rocketmq/bin/mqbroker -c rocketmq/conf/2m-2s-sync/broker-a.properties -n 172.28.0.15:9876;172.28.0.16:9876 &
+        #stdin_open: true
+        #tty: true
+        depends_on:
+            - nameserver1
+            - nameserver2
+            
+    broker1-s:
+        build: ./image/
+        networks:
+            - rocknet
+        working_dir: /data
+        hostname: broker1-s
+        command: bash rocketmq/bin/mqbroker -c rocketmq/conf/2m-2s-sync/broker-a-s.properties -n 172.28.0.15:9876;172.28.0.16:9876 &
+        #stdin_open: true
+        #tty: true
+        depends_on:
+            - nameserver1
+            - nameserver2
+            
+    broker2:
+        build: ./image/
+        networks:
+            - rocknet
+        working_dir: /data
+        hostname: broker2
+        command: bash rocketmq/bin/mqbroker -c rocketmq/conf/2m-2s-sync/broker-b.properties -n 172.28.0.15:9876;172.28.0.16:9876 &
+        #stdin_open: true
+        #tty: true
+        depends_on:
+            - nameserver1
+            - nameserver2
+
+    broker2-s:
+        build: ./image/
+        networks:
+            - rocknet
+        working_dir: /data
+        hostname: broker2-s
+        command: bash rocketmq/bin/mqbroker -c rocketmq/conf/2m-2s-sync/broker-b-s.properties -n 172.28.0.15:9876;172.28.0.16:9876 &
+        #stdin_open: true
+        #tty: true
+        depends_on:
+            - nameserver1
+            - nameserver2
+            
+networks:
+  rocknet:
+    ipam:
+       driver: default
+       config:
+           - subnet: "172.28.0.0/16"
