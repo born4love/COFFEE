@@ -11,3 +11,9 @@
 ```
 docker run -it -d --name rocket-project --network rocketmq_rocknet -v /usr/local/projects/java:/data/ -w /data openjdk:8-jdk /bin/bash
 ```
+
+使用 maven 构建并运行: 
+
+```
+mvn compile exec:java -Dexec.mainClass="com.baeldung.main.Exec"
+```
